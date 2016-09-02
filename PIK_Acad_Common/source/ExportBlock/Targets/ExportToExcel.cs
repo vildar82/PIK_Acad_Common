@@ -26,25 +26,21 @@ namespace PIK_Acad_Common.ExportBlock.Targets
                 var ws = xls.Workbook.Worksheets.Add("Блоки");
 
                 int r = 1;
-                int c = 1;
-                ws.Cells[r, c].Value = "№";
-                c++;
+                int c = 1;                                
                 foreach (DataColumn col in data.Columns)
                 {   
                     ws.Cells[r, c].Value = col.ColumnName;
                     c++;
                 }
 
-                r++;                
-                int count = 1;
+                r++;                                
                 foreach (DataRow row in data.Rows)
                 {
-                    c = 1;
-                    ws.Cells[r, c].Value = count++;
+                    c = 1;                    
                     foreach (DataColumn col in data.Columns)
-                    {
+                    {                        
+                        ws.Cells[r, c].Value = row[col.ColumnName];
                         c++;
-                        ws.Cells[r, c].Value = row[col.ColumnName];                        
                     }
                     r++;
                 }

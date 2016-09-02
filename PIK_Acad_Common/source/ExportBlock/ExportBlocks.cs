@@ -31,7 +31,7 @@ namespace PIK_Acad_Common.ExportBlock
             var blocks = SelectBlocks();
 
             // Группировка блоков
-            var groupsBlocks = blocks.GroupBy(g => g);
+            var groupsBlocks = blocks.GroupBy(g => g).OrderBy(o=>o.Key.BlName);
 
             // Данные для экспорта
             var exportData = GetExportData(groupsBlocks);
@@ -75,19 +75,22 @@ namespace PIK_Acad_Common.ExportBlock
                 OrderBy(o=>o).ToList();
 
             // Общие свойства - имя блока, кол
+            data.Columns.Add("№", typeof(int));
             data.Columns.Add("Имя блока", typeof(string));
             data.Columns.Add("Кол", typeof(int));
             
             foreach (var cname in uniqProperties)
             {
                 data.Columns.Add(cname);
-            }           
+            }
 
+            int count = 1;
             foreach (var blocks in groupsBlocks)
             {
                 var row = data.NewRow();
-                row[0] = blocks.Key.BlName;
-                row[1] = blocks.Count();
+                row[0] = count++;
+                row[1] = blocks.Key.BlName;
+                row[2] = blocks.Count();
                 foreach (var item in blocks.Key.Properties)
                 {
                     row[item.Name] = item.Value;
