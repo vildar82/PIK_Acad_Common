@@ -13,9 +13,9 @@ namespace PIK_Acad_Common.ExportBlock.Targets
 {
     class ExportToExcel : IExportTarget
     {
-        public void Export (DataTable data)
+        public void Export (DataTable data, string fileName)
         {            
-            string file = GetFile();
+            string file = GetFile(fileName);
             if (File.Exists(file))
             {
                 File.Delete(file);
@@ -48,7 +48,7 @@ namespace PIK_Acad_Common.ExportBlock.Targets
             }
         }
 
-        private string GetFile ()
+        private string GetFile (string name)
         {            
             SaveFileDialog dlg = new SaveFileDialog();
             dlg.AddExtension = true;
@@ -57,7 +57,7 @@ namespace PIK_Acad_Common.ExportBlock.Targets
             dlg.DefaultExt = ".xlsx";
             dlg.Filter = "Файл экспорта блоков (*.xlsx)|*.xlsx";
             dlg.RestoreDirectory = true;            
-            dlg.FileName = "ExportBlocks";
+            dlg.FileName = name;
             dlg.Title = "Сохранение файла экспорта";
             if (dlg.ShowDialog() != DialogResult.OK)
             {

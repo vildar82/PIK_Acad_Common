@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using AcadLib.Blocks;
 using Autodesk.AutoCAD.ApplicationServices;
@@ -37,7 +38,7 @@ namespace PIK_Acad_Common.ExportBlock
             var exportData = GetExportData(groupsBlocks);
 
             // Експорт данных
-            target.Export(exportData);
+            target.Export(exportData, "ExportBlocks_" + Path.GetFileNameWithoutExtension(doc.Name));
         }
         
         private List<IBlock> SelectBlocks ()

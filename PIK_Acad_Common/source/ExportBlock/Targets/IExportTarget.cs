@@ -9,6 +9,6 @@ namespace PIK_Acad_Common.ExportBlock.Targets
 {
     public interface IExportTarget
     {
-        void Export (DataTable exportData);
+        void Export (DataTable exportData, string fileName);
     }
 }
