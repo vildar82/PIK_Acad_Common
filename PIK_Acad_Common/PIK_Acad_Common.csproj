@@ -11,6 +11,7 @@
     <AssemblyName>PIK_Acad_Common</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -60,6 +61,9 @@
       <HintPath>..\..\..\Package\Excel\EPPlus.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="MicroMvvm">
+      <HintPath>..\..\..\Package\MVVM\MicroMvvm.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -69,6 +73,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="source\Commands.cs" />
@@ -76,8 +84,21 @@
     <Compile Include="source\ExportBlock\ExportBlocks.cs" />
     <Compile Include="source\ExportBlock\Targets\ExportToExcel.cs" />
     <Compile Include="source\ExportBlock\Targets\IExportTarget.cs" />
+    <Compile Include="source\Rename\Record.cs" />
+    <Compile Include="source\Rename\RenameSymbolTableRecordService.cs" />
+    <Compile Include="source\Rename\UI\RecordView.cs" />
+    <Compile Include="source\Rename\UI\RenameView.cs" />
+    <Compile Include="source\Rename\UI\RenameWindow.xaml.cs">
+      <DependentUpon>RenameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="source\Rename\UI\SymbolNameValidator.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="source\Rename\UI\RenameWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -9,14 +9,22 @@ using System.Reflection;
 using PIK_Acad_Common.ExportBlock;
 using PIK_Acad_Common.ExportBlock.Targets;
 
+[assembly: CommandClass(typeof(PIK_Acad_Common.Commands))]
+[assembly: ExtensionApplication(typeof(PIK_Acad_Common.Commands))]
+
 namespace PIK_Acad_Common
 {
-    public class Commands
+    public class Commands : IExtensionApplication
     {        
         public const string Group = AutoCAD_PIK_Manager.Commands.Group;
 
-        [CommandMethod(Group, "PIK_Common_About", CommandFlags.Modal)]
-        public void About()
+        public void Initialize ()
+        {
+            LoadService.LoadMicroMvvm();
+        }
+
+        [CommandMethod(Group, nameof(PIK_Common_About), CommandFlags.Modal)]
+        public void PIK_Common_About ()
         {
             CommandStart.Start(doc =>
             {
@@ -24,14 +32,28 @@ namespace PIK_Acad_Common
             });
         }
 
-        [CommandMethod(Group, "PIK_ExportBlocksBySpecialty", CommandFlags.Modal)]
-        public void ExportBlocksBySpecialty ()
+        [CommandMethod(Group, nameof(PIK_ExportBlocksBySpecialty), CommandFlags.Modal)]
+        public void PIK_ExportBlocksBySpecialty ()
         {
             CommandStart.Start(doc =>
             {
                 ExportBlocks exportBlocks = new ExportBlocks(doc);
                 exportBlocks.Export(new ExportToExcel());
             });
+        }
+
+        [CommandMethod(Group, nameof(PIK_RenameSymbolTableRecords), CommandFlags.Modal)]
+        public void PIK_RenameSymbolTableRecords ()
+        {
+            CommandStart.Start(doc =>
+            {
+                var rename = new Rename.RenameSymbolTableRecordService();
+                rename.Rename(doc.Database);
+            });
+        }
+
+        public void Terminate ()
+        {            
         }
     }
 }
