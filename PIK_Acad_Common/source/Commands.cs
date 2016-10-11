@@ -8,6 +8,7 @@ using AcadLib;
 using System.Reflection;
 using PIK_Acad_Common.ExportBlock;
 using PIK_Acad_Common.ExportBlock.Targets;
+using System.Windows;
 
 [assembly: CommandClass(typeof(PIK_Acad_Common.Commands))]
 [assembly: ExtensionApplication(typeof(PIK_Acad_Common.Commands))]
@@ -21,6 +22,13 @@ namespace PIK_Acad_Common
         public void Initialize ()
         {
             LoadService.LoadMicroMvvm();
+
+            if (System.Windows.Application.Current == null)
+            {
+                new System.Windows.Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
+            }
+            System.Windows.Application.Current.Resources.MergedDictionaries.Add(System.Windows.Application.LoadComponent(
+            new Uri("PIK_Acad_Common;component/source/Dictionary1.xaml", UriKind.Relative)) as ResourceDictionary);
         }
 
         [CommandMethod(Group, nameof(PIK_Common_About), CommandFlags.Modal)]
@@ -49,6 +57,18 @@ namespace PIK_Acad_Common
             {
                 var rename = new Rename.RenameSymbolTableRecordService();
                 rename.Rename(doc.Database);
+            });
+        }
+
+        /// <summary>
+        /// Вставка блоков текущего чертежа в ряд (по заданному фиотру) в текущее пространство
+        /// </summary>
+        [CommandMethod(Group, nameof(PIK_InsertBlocksBeside), CommandFlags.Modal)]
+        public void PIK_InsertBlocksBeside ()
+        {
+            CommandStart.Start(doc =>
+            {
+                Utils.BlockBeside.InsertBlockBeside.Insert(doc);
             });
         }
 
