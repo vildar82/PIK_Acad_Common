@@ -135,44 +135,13 @@ namespace PIK_Acad_Common.Utils.BlockBeside
                         ids.Add(blRef.Id);
                     }
                 }
-                
-                t.Commit();
-            }
-            using (EditorUserInteraction UI = ed.StartUserInteraction(InsertBlockBeside.win))
-            {
-                double l;
-                double h;
-                if (Orient == BesideOrientation.Столбик)
-                {
-                    l = length;
-                    h = Math.Abs(extOld.MinPoint.Y);
-                }
-                else
-                {
-                    l = Math.Abs(extOld.MaxPoint.X);
-                    h = length;
-                }
 
-                var rjig = new AcadLib.Jigs.RectangleJig(l, h);
-                var res = ed.Drag(rjig);
-                if (res.Status == PromptStatus.OK)
+                using (var UI = ed.StartUserInteraction(InsertBlockBeside.win))
                 {
-                    var mat = Matrix3d.Displacement(rjig.Position - extOld.MinPoint);
-                    using (var t = db.TransactionManager.StartTransaction())
-                    {
-                        foreach (var item in ids)
-                        {
-                            var ent = item.GetObject(OpenMode.ForWrite) as Entity;
-                            if (ent == null) continue;
-                            ent.TransformBy(mat);
-                        }                        
-                        t.Commit();
-                    }
+                    AcadLib.Jigs.DragSel.Drag(ed, ids.ToArray(), Point3d.Origin);
                 }
-                // Плохо работает - не выделяются блоки после этого
-                //AcadLib.Jigs.DragSel.Drag(ed, ids.ToArray(), Point3d.Origin);
-            }
-            ed.Regen();
+                t.Commit();
+            }            
             Save();
             Logger.Log.Info($"Insert {insertBlocks?.Count}, Filter={Filter}");
         }
