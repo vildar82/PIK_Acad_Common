@@ -174,6 +174,7 @@ namespace PIK_Acad_Common.Utils.BlockBeside
             }
             ed.Regen();
             Save();
+            Logger.Log.Info($"Insert {insertBlocks?.Count}, Filter={Filter}");
         }
 
         private void Load ()
