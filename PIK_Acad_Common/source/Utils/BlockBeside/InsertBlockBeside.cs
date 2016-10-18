@@ -17,8 +17,7 @@ namespace PIK_Acad_Common.Utils.BlockBeside
 
         public static void Insert (Document doc)
         {
-            win = new InsertBlockBesideWindow();            
-
+            win = new InsertBlockBesideWindow();  
             Application.ShowModalWindow(win);            
         }
     }
