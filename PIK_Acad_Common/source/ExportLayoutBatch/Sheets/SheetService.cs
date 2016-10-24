@@ -50,6 +50,10 @@ namespace PIK_Acad_Common.ExportLayoutsBatch
             // Выбор папки
             var dlg = new AcadLib.UI.FileFolderDialog();
             dlg.IsFolderDialog = true;
+            dlg.Dialog.Multiselect = true;
+            dlg.IsFolderDialog = true;
+            //dialog.Dialog.Title = "Выбор папки или файлов для печати чертежей в PDF.";
+            dlg.Dialog.Filter = "Чертежи|*.dwg";
             if (dlg.ShowDialog() != DialogResult.OK)
             {
                 throw new AcadLib.CancelByUserException();
