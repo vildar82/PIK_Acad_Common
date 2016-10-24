@@ -58,7 +58,7 @@ namespace PIK_Acad_Common
                 var rename = new Rename.RenameSymbolTableRecordService();
                 rename.Rename(doc.Database);
             });
-        }
+        }        
 
         /// <summary>
         /// Вставка блоков текущего чертежа в ряд (по заданному фиотру) в текущее пространство
@@ -69,6 +69,16 @@ namespace PIK_Acad_Common
             CommandStart.Start(doc =>
             {
                 Utils.BlockBeside.InsertBlockBeside.Insert(doc);
+            });
+        }
+
+        [CommandMethod(Group, nameof(PIK_ExportLayoutsBatch), CommandFlags.Session)]
+        public void PIK_ExportLayoutsBatch ()
+        {
+            CommandStart.Start(doc =>
+            {
+                var expLayots = new ExportLayoutsBatch.ExportLayoutService();
+                expLayots.Export();
             });
         }
 
