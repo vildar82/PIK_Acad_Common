@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AcadLib.Errors;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.Geometry;
 
@@ -20,8 +21,14 @@ namespace PIK_Acad_Common.ExportLayoutsBatch
             {
                 foreach (var item in filesSheets)
                 {
-                    item.Insert(ref ptInsert, docNew.Database);
-                    item.Bind(docNew.Database);
+                    try
+                    {
+                        item.Insert(ref ptInsert, docNew.Database);
+                        item.Bind(docNew.Database);
+                    }
+                    catch {
+                        Inspector.AddError($"Ошибка вставки и внедрения ссылки - {item.Name}");
+                    }
                 }
             }        
         }
