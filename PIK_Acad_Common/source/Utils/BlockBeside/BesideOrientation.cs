@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AcadLib.WPF;
+using AcadLib.WPF.Converters;
 
 namespace PIK_Acad_Common.Utils.BlockBeside
 {
