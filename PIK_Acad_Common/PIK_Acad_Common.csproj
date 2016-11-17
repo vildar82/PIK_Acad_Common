@@ -114,6 +114,12 @@
     <Compile Include="source\Utils\BlockBeside\InsertBlockBesideWindow.xaml.cs">
       <DependentUpon>InsertBlockBesideWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="source\Utils\SelectBlockByAttr\SelectBlocksByAttrs.cs" />
+    <Compile Include="source\Utils\SelectBlockByAttr\UI\PropertyViewModel.cs" />
+    <Compile Include="source\Utils\SelectBlockByAttr\UI\SelectBlockViewModel.cs" />
+    <Compile Include="source\Utils\SelectBlockByAttr\UI\SelectBlockView.xaml.cs">
+      <DependentUpon>SelectBlockView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="source\Dictionary1.xaml">
@@ -125,6 +131,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="source\Utils\BlockBeside\InsertBlockBesideWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="source\Utils\SelectBlockByAttr\UI\SelectBlockView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -9,6 +9,7 @@ using System.Reflection;
 using PIK_Acad_Common.ExportBlock;
 using PIK_Acad_Common.ExportBlock.Targets;
 using System.Windows;
+using PIK_Acad_Common.Utils;
 
 [assembly: CommandClass(typeof(PIK_Acad_Common.Commands))]
 [assembly: ExtensionApplication(typeof(PIK_Acad_Common.Commands))]
@@ -21,6 +22,8 @@ namespace PIK_Acad_Common
 
         public void Initialize ()
         {
+            Utils.SelectBlockByAttr.SelectBlocksByAttrs.AttachContextMenu();
+
             LoadService.LoadMicroMvvm();
 
             if (System.Windows.Application.Current == null)
