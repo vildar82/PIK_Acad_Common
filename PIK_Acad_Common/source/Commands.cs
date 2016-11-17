@@ -22,7 +22,7 @@ namespace PIK_Acad_Common
 
         public void Initialize ()
         {
-            Utils.SelectBlockByAttr.SelectBlocksByAttrs.AttachContextMenu();
+            Utils.SelectBlockByAttr.SelectBlocksByParam.AttachContextMenu();
 
             LoadService.LoadMicroMvvm();
 

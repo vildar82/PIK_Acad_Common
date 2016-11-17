@@ -16,9 +16,9 @@
         <Grid Grid.Row="0">
             <DataGrid ItemsSource="{Binding Properties}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Header="Выбрать" Binding="{Binding IsChecked}"/>
-                    <DataGridTextColumn Header="Параметр" Binding="{Binding Property.Name}"/>
-                    <DataGridTextColumn Header="Значение" Binding="{Binding Property.Value}"/>
+                    <DataGridCheckBoxColumn Header="Выбрать" Binding="{Binding IsChecked}" IsReadOnly="False"/>
+                    <DataGridTextColumn Header="Параметр" Binding="{Binding Property.Name}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Значение" Binding="{Binding Property.Value}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

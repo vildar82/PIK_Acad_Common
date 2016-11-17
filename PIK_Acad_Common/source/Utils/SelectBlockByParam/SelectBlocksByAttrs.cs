@@ -16,7 +16,7 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr
     /// <summary>
     /// Выбор одинаковых блоков по атрибутам
     /// </summary>
-    public static class SelectBlocksByAttrs
+    public static class SelectBlocksByParam
     {
         private const string MenuName = "Выброр по параметрам";
         private static RXClass RxClassBlockRef = RXObject.GetClass(typeof(BlockReference));
@@ -25,7 +25,7 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr
         {
             var cme = new ContextMenuExtension();
             var menu = new MenuItem(MenuName);
-            menu.Click += (o, e) => Select();
+            menu.Click += (o, e) => SelectBlockByParameters();
             cme.MenuItems.Add(menu);
             cme.MenuItems.Add(new MenuItem(""));
             // пока не имеет смысла, нужно найчится проверять принадлежность хар.линии поверхности, без перебора всех поверхностей, только по самой линии
@@ -72,28 +72,30 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr
         /// <summary>
         /// Выбор блоков по атрибутам
         /// </summary>
-        private static void Select ()
+        public static void SelectBlockByParameters ()
         {
             if (blBase == null)
             {
                 return;
             }
 
-            var selBlVM = new SelectBlockViewModel(blBase);
-            var selBlView = new SelectBlockView(selBlVM);
-            if (Application.ShowModalWindow(selBlView) == true)
+            CommandStart.Start(doc =>
             {
-                var doc = Application.DocumentManager.MdiActiveDocument;
-                if (doc == null) return;
-                var db = doc.Database;
-                var ed = doc.Editor;
-                // Выбор на чертеже блоков с такимиже атрибутами
-                var idsFiltered = Filter(selBlVM.SelectedProperties, db);
-                if (idsFiltered != null && idsFiltered.Any())
+                var selBlVM = new SelectBlockViewModel(blBase);
+                var selBlView = new SelectBlockView(selBlVM);
+                if (Application.ShowModalWindow(selBlView) == true)
                 {
-                    ed.SetImpliedSelection(idsFiltered.ToArray());
+                    var db = doc.Database;
+                    var ed = doc.Editor;
+                    // Выбор на чертеже блоков с такимиже атрибутами
+                    var idsFiltered = Filter(selBlVM.SelectedProperties, db);
+                    if (idsFiltered != null && idsFiltered.Any())
+                    {
+                        ed.SetImpliedSelection(idsFiltered.ToArray());
+                        Logger.Log.Info($"SelectBlockByAttr: {blBase.BlName} - {idsFiltered.Count}, {string.Join("; ", selBlVM.SelectedProperties.Select(s => $"{s.Name} = {s.Value}"))}");
+                    }
                 }
-            }
+            });
         }
 
         private static List<ObjectId> Filter (List<Property> selectedProperties, Database db)
