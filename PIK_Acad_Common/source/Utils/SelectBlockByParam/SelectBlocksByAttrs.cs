@@ -27,7 +27,7 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr
             var menu = new MenuItem(MenuName);
             menu.Click += (o, e) => SelectBlockByParameters();
             cme.MenuItems.Add(menu);
-            cme.MenuItems.Add(new MenuItem(""));
+            //cme.MenuItems.Add(new MenuItem(""));
             // пока не имеет смысла, нужно найчится проверять принадлежность хар.линии поверхности, без перебора всех поверхностей, только по самой линии
             cme.Popup += Cme_Popup;
             Application.AddObjectContextMenuExtension(RxClassBlockRef, cme);
@@ -123,22 +123,18 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr
                     // группировка по параметрам
                     foreach (var item in blocksBase)
                     {
-                        bool isOk = false;
+                        bool isOk = true;
                         foreach (var selProp in selectedProperties)
                         {
-                            isOk = false;
                             var propBase = item.Properties.Find(p => p.Equals(selProp));
                             if (propBase == null)
                             {
                                 isOk = false;
                                 break;
                             }
-                            isOk = true;
                         }
                         if (isOk)
-                        {
                             idsFiltered.Add(item.IdBlRef);
-                        }
                     }
                 }
                 t.Commit();
