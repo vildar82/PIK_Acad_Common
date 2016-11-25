@@ -27,8 +27,7 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr
             var menu = new MenuItem(MenuName);
             menu.Click += (o, e) => SelectBlockByParameters();
             cme.MenuItems.Add(menu);
-            //cme.MenuItems.Add(new MenuItem(""));
-            // пока не имеет смысла, нужно найчится проверять принадлежность хар.линии поверхности, без перебора всех поверхностей, только по самой линии
+            //cme.MenuItems.Add(new MenuItem(""));            
             cme.Popup += Cme_Popup;
             Application.AddObjectContextMenuExtension(RxClassBlockRef, cme);
         }       

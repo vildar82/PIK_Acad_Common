@@ -66,7 +66,7 @@ namespace PIK_Acad_Common
         /// <summary>
         /// Вставка блоков текущего чертежа в ряд (по заданному фиотру) в текущее пространство
         /// </summary>
-        [CommandMethod(Group, nameof(PIK_InsertBlocksBeside), CommandFlags.Modal)]
+        [CommandMethod(Group, nameof(PIK_InsertBlocksBeside), CommandFlags.Modal | CommandFlags.UsePickSet)]
         public void PIK_InsertBlocksBeside ()
         {
             CommandStart.Start(doc =>

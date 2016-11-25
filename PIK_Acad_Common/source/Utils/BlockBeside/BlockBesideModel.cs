@@ -9,6 +9,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using AcadLib;
 using Autodesk.AutoCAD.EditorInput;
+using System.Collections;
 
 namespace PIK_Acad_Common.Utils.BlockBeside
 {
@@ -60,24 +61,38 @@ namespace PIK_Acad_Common.Utils.BlockBeside
 
         private List<string> LoadBlocks ()
         {
-            List<string> res = new List<string>();
+            var res = new HashSet<string>();
             Document doc = Application.DocumentManager.MdiActiveDocument;
+            Editor ed = doc.Editor;
             Database db = doc.Database;
             using (var t = db.TransactionManager.StartTransaction())
-            {
-                var bt = db.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
-
-                foreach (var item in bt)
+            {                
+                var selImplRes = ed.SelectImplied();
+                if (selImplRes.Status == PromptStatus.OK && selImplRes.Value.Count>0)
                 {
-                    var btr = item.GetObject(OpenMode.ForRead) as BlockTableRecord;
-                    if (btr == null ||
-                        btr.IsLayout ||
-                        btr.Name.StartsWith("*")) continue;
-                    res.Add(btr.Name);
+                    foreach (var item in selImplRes.Value.GetObjectIds())
+                    {
+                        var blRef = item.GetObject(OpenMode.ForRead) as BlockReference;
+                        if (blRef == null) continue;
+                        var blName = blRef.GetEffectiveName();
+                        res.Add(blName);
+                    }
                 }
+                else
+                {
+                    var bt = db.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
+                    foreach (var item in bt)
+                    {
+                        var btr = item.GetObject(OpenMode.ForRead) as BlockTableRecord;
+                        if (btr == null ||
+                            btr.IsLayout ||
+                            btr.Name.StartsWith("*")) continue;
+                        res.Add(btr.Name);
+                    }
+                }    
                 t.Commit();
             }
-            return res;
+            return res.ToList();
         }
 
         public void Insert (List<string> insertBlocks)
