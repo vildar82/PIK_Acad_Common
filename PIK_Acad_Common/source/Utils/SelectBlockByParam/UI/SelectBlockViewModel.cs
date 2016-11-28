@@ -15,7 +15,7 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr.UI
         {
             BlBase = blBase;
             Ok = new RelayCommand(OnOkExecute);
-            Properties = blBase.Properties.Select(s => new PropertyViewModel(s)).ToList();
+            Properties = blBase.Properties.Where(p=>!p.IsReadOnly).Select(s => new PropertyViewModel(s)).ToList();
         }        
 
         public BlockBase BlBase { get; set; }

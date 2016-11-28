@@ -20,7 +20,8 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr
     {
         private const string MenuName = "Выброр по параметрам";
         private static RXClass RxClassBlockRef = RXObject.GetClass(typeof(BlockReference));
-        private static BlockBase blBase;
+
+        internal static BlockBase blBase;
         public static void AttachContextMenu ()
         {
             var cme = new ContextMenuExtension();
@@ -36,36 +37,44 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr
         {
             var contextMenu = sender as ContextMenuExtension;
             if (contextMenu != null)
-            {
-                var doc = Application.DocumentManager.MdiActiveDocument;
-                if (doc == null) return;
-                var db = doc.Database;
-                var ed = doc.Editor;
-
+            {                
                 var menu = contextMenu.MenuItems[0];
-                var selImpl = ed.SelectImplied();
-
-                // Проверить выбран ли один блок у которого есть аттрибуты
-                var mVisible = false;
-                var mEnabled = false;
-                if (selImpl.Status == Autodesk.AutoCAD.EditorInput.PromptStatus.OK && selImpl.Value.Count == 1)
+                // Проверить выбран ли один блок у которого есть аттрибуты                
+                if (IsCorrectImpliedSel())
                 {
-                    using (var t = db.TransactionManager.StartTransaction())
-                    {
-                        var blRef = selImpl.Value[0].ObjectId.GetObject(OpenMode.ForRead) as BlockReference;
-                        var blName = blRef.GetEffectiveName();
-                        blBase = new BlockBase(blRef, blName);
-                        if (blBase.Properties.Count > 0)
-                        {
-                            mVisible = true;
-                            mEnabled = true;
-                        }
-                        t.Commit();
-                    }
+                    menu.Enabled = true;
+                    menu.Visible = true;
                 }
-                menu.Enabled = mEnabled;
-                menu.Visible = mVisible;
+                else
+                {
+                    menu.Enabled = false;
+                    menu.Visible = false;
+                }                
             }
+        }
+
+        public static bool IsCorrectImpliedSel()
+        {
+            bool res = false;
+            var doc = Application.DocumentManager.MdiActiveDocument;
+            if (doc == null) return res;
+            var db = doc.Database;
+            var ed = doc.Editor;            
+            var selImpl = ed.SelectImplied();
+            if (selImpl.Status == Autodesk.AutoCAD.EditorInput.PromptStatus.OK && selImpl.Value.Count == 1)
+            {
+                using (var t = db.TransactionManager.StartTransaction())
+                {
+                    var blRef = selImpl.Value[0].ObjectId.GetObject(OpenMode.ForRead) as BlockReference;
+                    if (blRef != null)
+                    {
+                        blBase = new BlockBase(blRef, blRef.GetEffectiveName());
+                        res = true;
+                    }
+                    t.Commit();
+                }
+            }
+            return res;
         }
 
         /// <summary>

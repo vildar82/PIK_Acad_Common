@@ -8,8 +8,10 @@ using AcadLib;
 using System.Reflection;
 using PIK_Acad_Common.ExportBlock;
 using PIK_Acad_Common.ExportBlock.Targets;
-using System.Windows;
 using PIK_Acad_Common.Utils;
+using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.DatabaseServices;
 
 [assembly: CommandClass(typeof(PIK_Acad_Common.Commands))]
 [assembly: ExtensionApplication(typeof(PIK_Acad_Common.Commands))]
@@ -28,10 +30,10 @@ namespace PIK_Acad_Common
 
             if (System.Windows.Application.Current == null)
             {
-                new System.Windows.Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
+                new System.Windows.Application { ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown };
             }
             System.Windows.Application.Current.Resources.MergedDictionaries.Add(System.Windows.Application.LoadComponent(
-            new Uri("PIK_Acad_Common;component/source/Dictionary1.xaml", UriKind.Relative)) as ResourceDictionary);
+            new Uri("PIK_Acad_Common;component/source/Dictionary1.xaml", UriKind.Relative)) as System.Windows.ResourceDictionary);
         }
 
         [CommandMethod(Group, nameof(PIK_Common_About), CommandFlags.Modal)]
@@ -83,6 +85,38 @@ namespace PIK_Acad_Common
                 var expLayots = new ExportLayoutsBatch.ExportLayoutService();
                 expLayots.Export();
             });
+        }
+
+        [CommandMethod(Group, nameof(PIK_SelectBlockByParam), CommandFlags.Transparent | CommandFlags.UsePickSet | CommandFlags.Redraw)]
+        public void PIK_SelectBlockByParam()
+        {
+            var doc = Application.DocumentManager.MdiActiveDocument;
+            if (doc == null) return;
+            if (Utils.SelectBlockByAttr.SelectBlocksByParam.IsCorrectImpliedSel())
+            {
+                Utils.SelectBlockByAttr.SelectBlocksByParam.SelectBlockByParameters();
+            }
+            else
+            {
+                var selOpt = new PromptEntityOptions("\nВыбор блока:");
+                selOpt.SetRejectMessage("\nНужно выбрать блок.");
+                selOpt.AddAllowedClass(typeof(BlockReference), true);
+                selOpt.AllowNone = false;
+                selOpt.AllowObjectOnLockedLayer = true;                
+                var selRes = doc.Editor.GetEntity(selOpt);
+                if (selRes.Status == PromptStatus.OK)
+                {
+                    using (var t = doc.TransactionManager.StartTransaction())
+                    {
+                        var blRef = selRes.ObjectId.GetObject(OpenMode.ForRead) as BlockReference;
+                        if (blRef != null)
+                        {
+                            Utils.SelectBlockByAttr.SelectBlocksByParam.blBase = new AcadLib.Blocks.BlockBase(blRef, blRef.GetEffectiveName());
+                        }
+                    }
+                    Utils.SelectBlockByAttr.SelectBlocksByParam.SelectBlockByParameters();
+                }                
+            }
         }
 
         public void Terminate ()
