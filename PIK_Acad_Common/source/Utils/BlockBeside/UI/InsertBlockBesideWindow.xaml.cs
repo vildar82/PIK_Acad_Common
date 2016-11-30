@@ -28,13 +28,24 @@ namespace PIK_Acad_Common.Utils.BlockBeside
             if (vm.CloseAction == null)
                 vm.CloseAction = new Action(this.Close);
 
-            this.PreviewKeyDown += new KeyEventHandler(HandleEsc);
+            this.PreviewKeyDown += new KeyEventHandler(HandleEsc);            
         }
 
         private void HandleEsc (object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
                 Close();
+        }
+
+        private void ListBoxItem_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                ListBoxItem lbi = sender as ListBoxItem;
+                lbi.IsSelected = !lbi.IsSelected;
+                lbi.Focus();
+                lbBlocks.SelectedItems.Add(lbi);
+            }
         }
     }
 }

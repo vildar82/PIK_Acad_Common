@@ -108,10 +108,11 @@
     </Compile>
     <Compile Include="source\Rename\UI\SymbolNameValidator.cs" />
     <Compile Include="source\Utils\BlockBeside\BlockBesideModel.cs" />
-    <Compile Include="source\Utils\BlockBeside\BlockBesideModelView.cs" />
+    <Compile Include="source\Utils\BlockBeside\UI\BlockBesideModelView.cs" />
     <Compile Include="source\Utils\BlockBeside\BesideOrientation.cs" />
     <Compile Include="source\Utils\BlockBeside\InsertBlockBeside.cs" />
-    <Compile Include="source\Utils\BlockBeside\InsertBlockBesideWindow.xaml.cs">
+    <Compile Include="source\Utils\BlockBeside\UI\BlockModel.cs" />
+    <Compile Include="source\Utils\BlockBeside\UI\InsertBlockBesideWindow.xaml.cs">
       <DependentUpon>InsertBlockBesideWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="source\Utils\SelectBlockByParam\SelectBlocksByAttrs.cs" />
@@ -130,7 +131,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="source\Utils\BlockBeside\InsertBlockBesideWindow.xaml">
+    <Page Include="source\Utils\BlockBeside\UI\InsertBlockBesideWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

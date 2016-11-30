@@ -18,23 +18,24 @@ namespace PIK_Acad_Common.Utils.BlockBeside
         public BlockBesideModelView()
         {
             IsVisible = true;
-            Blocks = new ObservableCollection<string>();
+            Blocks = new ObservableCollection<BlockModel>();
 
             model = new BlockBesideModel();
             Filter = model.Filter;
 
-            Insert = new RelayCommand(() => InsertExecute(), () => Blocks.Count > 0);
-            Delete = new RelayCommand<IList>((s) => DeleteExecute(s), (s) =>!string.IsNullOrEmpty(SelectedBlock));            
+            Insert = new RelayCommand(InsertExecute, () => Blocks.Count > 0);
+            Delete = new RelayCommand(DeleteExecute, ()=> Blocks.Any(b=>b.IsSelected));            
         }        
 
-        public ICommand Insert { get; set; }
-        public ICommand Delete { get; set; }
+        public RelayCommand Insert { get; set; }
+        public RelayCommand Delete { get; set; }
 
         private string selectedBlock;
         public string SelectedBlock {
             get { return selectedBlock; }
             set { selectedBlock = value;
                 RaisePropertyChanged();
+                SelectedCount = Blocks.Sum(s => s.IsSelected ? 1 : 0);
             }
         }
 
@@ -53,16 +54,19 @@ namespace PIK_Acad_Common.Utils.BlockBeside
                 model.Orient = orient;
                 RaisePropertyChanged();
             }
-        }        
+        }                
 
-        public ObservableCollection<string> Blocks { get; set; }
+        public ObservableCollection<BlockModel> Blocks { get; set; }
+
+        public int SelectedCount { get { return selectedCount; } set { selectedCount = value; RaisePropertyChanged(); } }
+        int selectedCount;
 
         private void Update ()
         {
             Blocks.Clear();
             foreach (var item in model.Blocks)
             {
-                Blocks.Add(item);
+                Blocks.Add(new BlockModel (item));
             }
         }
 
@@ -79,17 +83,22 @@ namespace PIK_Acad_Common.Utils.BlockBeside
         {
             IsVisible = false;
 
-            model.Insert(Blocks.ToList());
+            // Блоки для вставки
+            var blocksToInsert = Blocks.Where(b => b.IsSelected).ToList();
+            if (blocksToInsert.Count<=1)
+            {
+                blocksToInsert = Blocks.ToList();
+            }            
+
+            model.Insert(blocksToInsert.Select(s=>s.Name).ToList());
 
             CloseAction();
             //IsVisible = true;
         }
-        private void DeleteExecute (IList s)
+        private void DeleteExecute ()
         {
-            if (s == null || s.Count == 0) return;
-
-            var removeBlocks = s.Cast<string>().ToList();
-            foreach (var item in removeBlocks)
+            var blocksSelectes = Blocks.Where(b => b.IsSelected).ToList();                        
+            foreach (var item in blocksSelectes)
             {
                 Blocks.Remove(item);
             }         
