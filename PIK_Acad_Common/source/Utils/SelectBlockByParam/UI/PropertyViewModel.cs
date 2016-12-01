@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using MicroMvvm;
 
-namespace PIK_Acad_Common.Utils.SelectBlockByAttr.UI
+namespace PIK_Acad_Common.Utils.SelectBlockByParam.UI
 {
     public class PropertyViewModel : ObservableObject
     {
@@ -17,6 +17,7 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr.UI
         
         public Property Property { get; set; }
 
-        public bool IsChecked { get; set; }
+        public bool IsChecked { get { return isChecked; } set { isChecked = value; RaisePropertyChanged(); } }
+        bool isChecked;
     }
 }

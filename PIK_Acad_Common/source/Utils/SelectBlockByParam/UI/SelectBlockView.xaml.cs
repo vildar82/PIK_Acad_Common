@@ -12,15 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PIK_Acad_Common.Utils.SelectBlockByAttr.UI
+namespace PIK_Acad_Common.Utils.SelectBlockByParam.UI
 {
     /// <summary>
     /// Логика взаимодействия для SelectBlockWindow.xaml
     /// </summary>
     public partial class SelectBlockView : Window
     {
-        public SelectBlockView () : this(null)
+        public SelectBlockView() : this(null)
         {
+            
         }
 
         public SelectBlockView (SelectBlockViewModel selBlVM)
@@ -33,5 +34,10 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr.UI
         {
             DialogResult = true;            
         }
+
+        //private void cellCheckClick(object sender, RoutedEventArgs e)
+        //{
+            
+        //}        
     }
 }

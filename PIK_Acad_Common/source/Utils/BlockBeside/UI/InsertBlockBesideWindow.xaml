@@ -12,6 +12,7 @@
     Visibility="{Binding IsVisible, Converter={StaticResource boolToVis}, Mode=TwoWay}"
     mc:Ignorable="d">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVis"/>
         <Style TargetType="{x:Type ToolTip}">
             <Setter Property="ContentTemplate">
                 <Setter.Value>

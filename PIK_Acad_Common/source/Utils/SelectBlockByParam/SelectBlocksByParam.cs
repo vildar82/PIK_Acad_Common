@@ -8,10 +8,10 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
 using Autodesk.AutoCAD.Windows;
-using PIK_Acad_Common.Utils.SelectBlockByAttr.UI;
 using AcadLib;
+using PIK_Acad_Common.Utils.SelectBlockByParam.UI;
 
-namespace PIK_Acad_Common.Utils.SelectBlockByAttr
+namespace PIK_Acad_Common.Utils.SelectBlockByParam
 {
     /// <summary>
     /// Выбор одинаковых блоков по атрибутам
@@ -20,8 +20,8 @@ namespace PIK_Acad_Common.Utils.SelectBlockByAttr
     {
         private const string MenuName = "Выброр по параметрам";
         private static RXClass RxClassBlockRef = RXObject.GetClass(typeof(BlockReference));
-
-        internal static BlockBase blBase;
+        public static SelectBlocksByParamOptions Options = SelectBlocksByParamOptions.Load();
+        public static BlockBase blBase;
         public static void AttachContextMenu ()
         {
             var cme = new ContextMenuExtension();

@@ -24,16 +24,16 @@ namespace PIK_Acad_Common
 
         public void Initialize ()
         {
-            Utils.SelectBlockByAttr.SelectBlocksByParam.AttachContextMenu();
+            Utils.SelectBlockByParam.SelectBlocksByParam.AttachContextMenu();
 
             LoadService.LoadMicroMvvm();
 
-            if (System.Windows.Application.Current == null)
-            {
-                new System.Windows.Application { ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown };
-            }
-            System.Windows.Application.Current.Resources.MergedDictionaries.Add(System.Windows.Application.LoadComponent(
-            new Uri("PIK_Acad_Common;component/source/Dictionary1.xaml", UriKind.Relative)) as System.Windows.ResourceDictionary);
+            //if (System.Windows.Application.Current == null)
+            //{
+            //    new System.Windows.Application { ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown };
+            //}
+            //System.Windows.Application.Current.Resources.MergedDictionaries.Add(System.Windows.Application.LoadComponent(
+            //new Uri("PIK_Acad_Common;component/source/Dictionary1.xaml", UriKind.Relative)) as System.Windows.ResourceDictionary);
         }
 
         [CommandMethod(Group, nameof(PIK_Common_About), CommandFlags.Modal)]
@@ -92,9 +92,9 @@ namespace PIK_Acad_Common
         {
             var doc = Application.DocumentManager.MdiActiveDocument;
             if (doc == null) return;
-            if (Utils.SelectBlockByAttr.SelectBlocksByParam.IsCorrectImpliedSel())
+            if (Utils.SelectBlockByParam.SelectBlocksByParam.IsCorrectImpliedSel())
             {
-                Utils.SelectBlockByAttr.SelectBlocksByParam.SelectBlockByParameters();
+                Utils.SelectBlockByParam.SelectBlocksByParam.SelectBlockByParameters();
             }
             else
             {
@@ -111,16 +111,17 @@ namespace PIK_Acad_Common
                         var blRef = selRes.ObjectId.GetObject(OpenMode.ForRead) as BlockReference;
                         if (blRef != null)
                         {
-                            Utils.SelectBlockByAttr.SelectBlocksByParam.blBase = new AcadLib.Blocks.BlockBase(blRef, blRef.GetEffectiveName());
+                            Utils.SelectBlockByParam.SelectBlocksByParam.blBase = new AcadLib.Blocks.BlockBase(blRef, blRef.GetEffectiveName());
                         }
                     }
-                    Utils.SelectBlockByAttr.SelectBlocksByParam.SelectBlockByParameters();
+                    Utils.SelectBlockByParam.SelectBlocksByParam.SelectBlockByParameters();
                 }                
             }
         }
 
         public void Terminate ()
-        {            
+        {
+            Utils.SelectBlockByParam.SelectBlocksByParam.Options.Save();
         }
     }
 }
