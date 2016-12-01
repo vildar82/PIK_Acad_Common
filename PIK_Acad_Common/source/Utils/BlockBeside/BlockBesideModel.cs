@@ -151,10 +151,10 @@ namespace PIK_Acad_Common.Utils.BlockBeside
                     }
                 }
 
-                using (var UI = ed.StartUserInteraction(InsertBlockBeside.win))
-                {
+                //using (var UI = ed.StartUserInteraction(InsertBlockBeside.win))
+                //{
                     AcadLib.Jigs.DragSel.Drag(ed, ids.ToArray(), Point3d.Origin);
-                }
+                //}
                 t.Commit();
             }            
             Save();

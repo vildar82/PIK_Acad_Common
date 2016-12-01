@@ -12,12 +12,10 @@ namespace PIK_Acad_Common.Utils.BlockBeside
 {
     public class BlockBesideModelView : ObservableObject
     {
-        private BlockBesideModel model;
-        public Action CloseAction { get; set; }
+        private BlockBesideModel model;        
 
         public BlockBesideModelView()
-        {
-            IsVisible = true;
+        {            
             Blocks = new ObservableCollection<BlockModel>();
 
             model = new BlockBesideModel();
@@ -68,33 +66,19 @@ namespace PIK_Acad_Common.Utils.BlockBeside
             {
                 Blocks.Add(new BlockModel (item));
             }
-        }
-
-        private bool isVisible = false;
-        public bool IsVisible {
-            get { return isVisible; }
-            set {
-                isVisible = value;
-                RaisePropertyChanged();
-            }
-        }
+        }       
 
         private void InsertExecute ()
         {
-            IsVisible = false;
-
             // Блоки для вставки
             var blocksToInsert = Blocks.Where(b => b.IsSelected).ToList();
             if (blocksToInsert.Count<=1)
             {
                 blocksToInsert = Blocks.ToList();
-            }            
-
-            model.Insert(blocksToInsert.Select(s=>s.Name).ToList());
-
-            CloseAction();
-            //IsVisible = true;
+            }  
+            model.Insert(blocksToInsert.Select(s=>s.Name).ToList());            
         }
+
         private void DeleteExecute ()
         {
             var blocksSelectes = Blocks.Where(b => b.IsSelected).ToList();                        

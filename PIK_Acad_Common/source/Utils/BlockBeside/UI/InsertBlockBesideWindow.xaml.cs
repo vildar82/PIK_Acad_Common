@@ -21,14 +21,11 @@ namespace PIK_Acad_Common.Utils.BlockBeside
     {
         public InsertBlockBesideWindow ()
         {
-            InitializeComponent();
+            InitializeComponent();            
 
             var vm = new BlockBesideModelView();
-            DataContext = vm;
-            if (vm.CloseAction == null)
-                vm.CloseAction = new Action(this.Close);
-
-            this.PreviewKeyDown += new KeyEventHandler(HandleEsc);            
+            DataContext = vm;            
+            this.PreviewKeyDown += HandleEsc;            
         }
 
         private void HandleEsc (object sender, KeyEventArgs e)
@@ -46,6 +43,11 @@ namespace PIK_Acad_Common.Utils.BlockBeside
                 lbi.Focus();
                 lbBlocks.SelectedItems.Add(lbi);
             }
+        }
+
+        private void InsertClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
         }
     }
 }
