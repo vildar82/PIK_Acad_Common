@@ -100,7 +100,7 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam
                     if (idsFiltered != null && idsFiltered.Any())
                     {
                         ed.SetImpliedSelection(idsFiltered.ToArray());
-                        Logger.Log.Info($"SelectBlockByAttr: {blBase.BlName} - {idsFiltered.Count}, {string.Join("; ", selBlVM.SelectedProperties.Select(s => $"{s.Name} = {s.Value}"))}");
+                        Logger.Log.Info($"SelectBlockByParam: {blBase.BlName} - {idsFiltered.Count} : {string.Join("; ", selBlVM.SelectedProperties.Select(s => $"{s.Name} = {s.Value}"))}");
                     }
                 }
             });

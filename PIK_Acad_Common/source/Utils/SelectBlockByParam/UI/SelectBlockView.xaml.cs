@@ -35,9 +35,14 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam.UI
             DialogResult = true;            
         }
 
-        //private void cellCheckClick(object sender, RoutedEventArgs e)
-        //{
-            
-        //}        
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Space)
+            {
+                bOK.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                bOK.Command.Execute(bOK.CommandParameter);
+                e.Handled = true;
+            }
+        } 
     }
 }
