@@ -49,5 +49,15 @@ namespace PIK_Acad_Common.Utils.BlockBeside
         {
             DialogResult = true;
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Space)
+            {
+                bInsert.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                bInsert.Command.Execute(bInsert.CommandParameter);
+                e.Handled = true;
+            }
+        }
     }
 }
