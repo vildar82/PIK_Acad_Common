@@ -7,7 +7,7 @@
         d:DataContext="{d:DesignInstance local:SelectBlockViewModel,
                                      IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
-        Title="Выбор блоков по параметрам" Height="252" Width="228"        
+         Height="252" Width="228"        
         PreviewKeyDown="Window_KeyDown">
     <Grid>
         <Grid.RowDefinitions>
@@ -25,13 +25,13 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>                   
                     <DataGridTextColumn Header="Параметр" Binding="{Binding Property.Name}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Значение" Binding="{Binding Property.Value}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Значение" Binding="{Binding Property.Value}" IsReadOnly="False"/>
                 </DataGrid.Columns>                
             </DataGrid>
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button x:Name="bOK" Content="OK" Command="{Binding Ok}" Click="Ok_Click" Width="50" Margin="2" IsDefault="True"/>
-            <Button Content="Отмена" Width="50" IsCancel="True" Margin="2"/>
+            <Button x:Name="bSelect" Content="Из выбранного" Click="Select_Click" Margin="2,2,10,2"/>
+            <Button x:Name="bOK" Content="OK" Command="{Binding Ok}" Click="Ok_Click" Width="50" Margin="2" IsDefault="True"/>            
         </StackPanel>
     </Grid>
 </Window>

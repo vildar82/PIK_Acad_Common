@@ -27,6 +27,7 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam
             var cme = new ContextMenuExtension();
             var menu = new MenuItem(MenuName);
             menu.Click += (o, e) => SelectBlockByParameters();
+            //menu.Icon = PIK_Acad_Common.Properties.Resources.select;
             cme.MenuItems.Add(menu);
             //cme.MenuItems.Add(new MenuItem(""));            
             cme.Popup += Cme_Popup;
@@ -89,31 +90,49 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam
 
             CommandStart.Start(doc =>
             {
-                var selBlVM = new SelectBlockViewModel(blBase);
+                var selBlVM = new SelectBlockViewModel(blBase, Select);
                 var selBlView = new SelectBlockView(selBlVM);
-                if (Application.ShowModalWindow(selBlView) == true)
-                {
-                    var db = doc.Database;
-                    var ed = doc.Editor;
-                    // Выбор на чертеже блоков с такимиже атрибутами
-                    var idsFiltered = Filter(selBlVM.SelectedProperties, db);
-                    if (idsFiltered != null && idsFiltered.Any())
-                    {
-                        ed.SetImpliedSelection(idsFiltered.ToArray());
-                        //Logger.Log.Info($"SelectBlockByParam: {blBase.BlName} - {idsFiltered.Count} : {string.Join("; ", selBlVM.SelectedProperties.Select(s => $"{s.Name} = {s.Value}"))}");
-                    }
-                }
+                Application.ShowModalWindow(selBlView);                
             });
         }
 
-        private static List<ObjectId> Filter (List<Property> selectedProperties, Database db)
+        private static void Select(List<Property> selProps)
         {
+            var doc= Application.DocumentManager.MdiActiveDocument;
+            var db = doc.Database;
+            var ed = doc.Editor;
+            // Выбор на чертеже блоков с такимиже атрибутами
+            var idsFiltered = Filter(selProps, doc);
+            if (idsFiltered != null && idsFiltered.Any())
+            {
+                ed.SetImpliedSelection(idsFiltered.ToArray());
+                //Logger.Log.Info($"SelectBlockByParam: {blBase.BlName} - {idsFiltered.Count} : {string.Join("; ", selBlVM.SelectedProperties.Select(s => $"{s.Name} = {s.Value}"))}");
+            }
+        }
+
+        private static List<ObjectId> Filter (List<Property> selectedProperties, Document doc)
+        {
+            var db = doc.Database;
+            var ed = doc.Editor;
             var idsFiltered = new List<ObjectId>();   
             using (var t = db.TransactionManager.StartTransaction())
             {
-                var cs = blBase.IdBtrOwner.GetObject(OpenMode.ForRead) as BlockTableRecord;
+                IEnumerable<ObjectId> ids = null;
+                var selImpl = ed.SelectImplied();
+                if (selImpl.Status == Autodesk.AutoCAD.EditorInput.PromptStatus.OK)
+                {
+                    if (selImpl.Value.Count>1)
+                    {
+                        ids = selImpl.Value.GetObjectIds();
+                    }
+                }
+                if (ids == null)
+                {
+                    var cs = blBase.IdBtrOwner.GetObject(OpenMode.ForRead) as BlockTableRecord;
+                    ids = cs.Cast<ObjectId>();
+                }
                 var blocksBase = new List<BlockBase>();
-                foreach (var entId in cs)
+                foreach (var entId in ids)
                 {
                     if (entId.IsValidEx())
                     {

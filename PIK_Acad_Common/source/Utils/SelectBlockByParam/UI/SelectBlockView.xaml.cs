@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autodesk.AutoCAD.DatabaseServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,13 +28,9 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam.UI
         public SelectBlockView (SelectBlockViewModel selBlVM)
         {
             InitializeComponent();
+            Title = $"Выбор блоков {selBlVM?.BlBase?.BlName} по параметрам";
             DataContext = selBlVM;
-        }       
-
-        private void Ok_Click (object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;            
-        }
+        }              
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -42,7 +39,39 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam.UI
                 bOK.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
                 bOK.Command.Execute(bOK.CommandParameter);
                 e.Handled = true;
+                this.Close();
             }
-        } 
+            else if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                this.Close();                
+            }
+        }
+
+        private void Select_Click(object sender, RoutedEventArgs e)
+        {
+            var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+            if (doc == null) return;
+            var ed = doc.Editor;
+            Hide();
+            ed.SetImpliedSelection(new ObjectId[0]);
+            var selRes = ed.GetSelection();            
+
+            if (selRes.Status == Autodesk.AutoCAD.EditorInput.PromptStatus.OK && selRes.Value.Count > 0)
+            {
+                ed.SetImpliedSelection(selRes.Value.GetObjectIds());
+                bOK.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                bOK.Command.Execute(bOK.CommandParameter);
+            }
+            else
+            {
+                Show();
+            }                
+        }
+
+        private void Ok_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
