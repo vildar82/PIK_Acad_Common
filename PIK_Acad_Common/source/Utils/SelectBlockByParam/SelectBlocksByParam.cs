@@ -141,7 +141,11 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam
                         var blName = blRef.GetEffectiveName();
                         if (blName == blBase.BlName)
                         {
-                            blocksBase.Add(new BlockBase(blRef, blName));
+                            var blBase = new BlockBase(blRef, blName);
+                            if (blBase.IsVisible)
+                            {
+                                blocksBase.Add(blBase);
+                            }
                         }
                     }
                 }

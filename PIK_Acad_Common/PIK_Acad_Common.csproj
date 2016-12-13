@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="source\Rename\UI\SymbolNameValidator.cs" />
     <Compile Include="source\Utils\BlockBeside\BlockBesideModel.cs" />
+    <Compile Include="source\Utils\BlockBeside\GenerateBlockPreview.cs" />
     <Compile Include="source\Utils\BlockBeside\UI\BlockBesideModelView.cs" />
     <Compile Include="source\Utils\BlockBeside\BesideOrientation.cs" />
     <Compile Include="source\Utils\BlockBeside\InsertBlockBeside.cs" />
