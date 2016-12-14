@@ -22,6 +22,8 @@ namespace AcadTest
             var db = doc.Database;
 
             var blocks = new BlocksModel(db);
+            var genPreviews = new GenerateBlockPreview(db);
+            genPreviews.Generate(blocks.Blocks.ToList());
             var win = new BlocksView(blocks);
             try
             {

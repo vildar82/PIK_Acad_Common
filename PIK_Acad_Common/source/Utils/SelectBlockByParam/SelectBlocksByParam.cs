@@ -66,11 +66,15 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam
             {
                 using (var t = db.TransactionManager.StartTransaction())
                 {
-                    var blRef = selImpl.Value[0].ObjectId.GetObject(OpenMode.ForRead) as BlockReference;
-                    if (blRef != null)
+                    var blRefId = selImpl.Value[0].ObjectId;
+                    if (blRefId.IsValidEx())
                     {
-                        blBase = new BlockBase(blRef, blRef.GetEffectiveName());
-                        res = true;
+                        var blRef = blRefId.GetObject(OpenMode.ForRead) as BlockReference;
+                        if (blRef != null)
+                        {
+                            blBase = new BlockBase(blRef, blRef.GetEffectiveName());
+                            res = true;
+                        }
                     }
                     t.Commit();
                 }

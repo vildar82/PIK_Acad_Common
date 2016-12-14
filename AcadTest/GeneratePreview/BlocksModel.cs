@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using MicroMvvm;
 using AcadLib;
 using AcadLib.Blocks;
+using PIK_Acad_Common.Utils.BlockBeside;
 
 namespace AcadTest.GeneratePreview
 {
@@ -26,7 +27,6 @@ namespace AcadTest.GeneratePreview
         public List<Block> Selected { get; set; }
         public RelayCommand Ok { get; set; }
 
-
         private ObservableCollection<Block> GetBlocks(Database db)
         {
             var blocks = new ObservableCollection<Block>();
@@ -44,7 +44,7 @@ namespace AcadTest.GeneratePreview
                 }
                 t.Commit();
             }
-            return blocks;
+            return blocks;            
         }
 
         private bool CanOkExecute()

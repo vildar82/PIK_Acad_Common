@@ -17,6 +17,7 @@
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock Text="{Binding Name}"/>
+                        <Image Source="{Binding Preview}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

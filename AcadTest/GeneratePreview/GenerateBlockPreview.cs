@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PIK_Acad_Common.Utils.BlockBeside
+namespace AcadTest.GeneratePreview
 {
     public class GenerateBlockPreview
     {        
@@ -23,34 +23,31 @@ namespace PIK_Acad_Common.Utils.BlockBeside
             token?.Cancel();
         }
 
-        public async Task<Dictionary<string, System.Drawing.Image>> Generate(List<string> blNames)
+        public void Generate(List<Block> blocks)
         {
             token = new CancellationTokenSource();
-            var task = Task.Run(() => NewMethod(blNames, token.Token), token.Token);
-            return await task;            
+            Task.Run(() => NewMethod(blocks, token.Token), token.Token);            
         }
 
-        private Dictionary<string, System.Drawing.Image> NewMethod(List<string> blNames, CancellationToken token)
-        {
-            var previews = new Dictionary<string, System.Drawing.Image>();
+        private void NewMethod(List<Block> blNames, CancellationToken token)
+        {            
             using (var t = db.TransactionManager.StartTransaction())
             {
                 var bt = db.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
                 foreach (var item in blNames)
                 {
-                    if (token.IsCancellationRequested)
+                    if (!token.IsCancellationRequested)
                     {
-                        if (bt.Has(item))
+                        if (bt.Has(item.Name))
                         {
-                            var btr = bt[item].GetObject(OpenMode.ForRead) as BlockTableRecord;
-                            var preview = AcadLib.Blocks.Visual.BlockPreviewHelper.GetPreviewImage(btr);
-                            previews.Add(item, preview);
+                            var btr = bt[item.Name].GetObject(OpenMode.ForRead) as BlockTableRecord;
+                            var preview = AcadLib.Blocks.Visual.BlockPreviewHelper.GetPreview(btr);
+                            item.Preview = preview;
                         }
                     }
                 }
                 t.Commit();
-            }
-            return previews;
+            }            
         }        
     }
 }

@@ -26,7 +26,7 @@ namespace PIK_Acad_Common
         {
             Utils.SelectBlockByParam.SelectBlocksByParam.AttachContextMenu();
 
-            LoadService.LoadMicroMvvm();
+            //LoadService.LoadMicroMvvm();
 
             //if (System.Windows.Application.Current == null)
             //{

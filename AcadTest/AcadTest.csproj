@@ -64,6 +64,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -84,6 +85,7 @@
       <DependentUpon>BlocksView.xaml</DependentUpon>
     </Compile>
     <Compile Include="GeneratePreview\BlocksModel.cs" />
+    <Compile Include="GeneratePreview\GenerateBlockPreview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -112,6 +114,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PIK_Acad_Common\PIK_Acad_Common.csproj">
+      <Project>{A1DD4546-C072-4272-B45B-E9706220CFE8}</Project>
+      <Name>PIK_Acad_Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
