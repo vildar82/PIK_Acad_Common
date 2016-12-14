@@ -21,6 +21,7 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam
         private const string MenuName = "Выброр по параметрам";
         private static RXClass RxClassBlockRef = RXObject.GetClass(typeof(BlockReference));
         public static SelectBlocksByParamOptions Options = SelectBlocksByParamOptions.Load();
+        public static ObjectId blBaseId;
         public static BlockBase blBase;
         public static void AttachContextMenu ()
         {
@@ -55,7 +56,7 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam
         }
 
         public static bool IsCorrectImpliedSel()
-        {
+        {            
             bool res = false;
             var doc = Application.DocumentManager.MdiActiveDocument;
             if (doc == null) return res;
@@ -64,20 +65,21 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam
             var selImpl = ed.SelectImplied();
             if (selImpl.Status == Autodesk.AutoCAD.EditorInput.PromptStatus.OK && selImpl.Value.Count == 1)
             {
-                using (var t = db.TransactionManager.StartTransaction())
-                {
-                    var blRefId = selImpl.Value[0].ObjectId;
-                    if (blRefId.IsValidEx())
-                    {
-                        var blRef = blRefId.GetObject(OpenMode.ForRead) as BlockReference;
-                        if (blRef != null)
-                        {
-                            blBase = new BlockBase(blRef, blRef.GetEffectiveName());
-                            res = true;
-                        }
-                    }
-                    t.Commit();
-                }
+                res = true;
+                //using (var t = db.TransactionManager.StartTransaction())
+                //{
+                //    var blRefId = selImpl.Value[0].ObjectId;
+                //    if (blRefId.IsValidEx())
+                //    {
+                //        var blRef = blRefId.GetObject(OpenMode.ForRead) as BlockReference;
+                //        if (blRef != null)
+                //        {
+                //            blBase = new BlockBase(blRef, blRef.GetEffectiveName());
+                //            res = true;
+                //        }
+                //    }
+                //    t.Commit();
+                //}
             }
             return res;
         }
@@ -87,13 +89,22 @@ namespace PIK_Acad_Common.Utils.SelectBlockByParam
         /// </summary>
         public static void SelectBlockByParameters ()
         {
-            if (blBase == null)
-            {
-                return;
-            }
-
             CommandStart.Start(doc =>
             {
+                var selImpl = doc.Editor.SelectImplied();                
+                if(selImpl.Status != Autodesk.AutoCAD.EditorInput.PromptStatus.OK)
+                {
+                    return;
+                }
+                var blRefId = selImpl.Value[0].ObjectId;
+                if (!blRefId.IsValidEx()) return;                
+                using (var t = doc.TransactionManager.StartTransaction())
+                {
+                    var blRef = blRefId.GetObject(OpenMode.ForRead) as BlockReference;
+                    var blName = blRef.GetEffectiveName();
+                    blBase = new BlockBase(blRef, blName);
+                    t.Commit();
+                }
                 var selBlVM = new SelectBlockViewModel(blBase, Select);
                 var selBlView = new SelectBlockView(selBlVM);
                 Application.ShowModalWindow(selBlView);                
