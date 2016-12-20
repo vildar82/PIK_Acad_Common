@@ -34,22 +34,36 @@ namespace PIK_Acad_Common.Utils.BlockBeside
                 Close();
         }
 
+        /// <summary>
+        /// Выделение элементов
+        /// </summary>        
         private void ListBoxItem_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
+        {            
+            ListBoxItem lbi = sender as ListBoxItem;
+            // Если зажата левая кнопка, то выделение            
+            if (e.LeftButton == MouseButtonState.Pressed && !lbi.IsSelected)
             {
-                ListBoxItem lbi = sender as ListBoxItem;
-                lbi.IsSelected = !lbi.IsSelected;
+                lbi.IsSelected = true;
                 lbi.Focus();
-                lbBlocks.SelectedItems.Add(lbi);
+                //lbBlocks.SelectedItems.Add(lbi);
             }
-        }
+            // Если зажата правая кнопка - снятие выделения
+            else if (e.RightButton == MouseButtonState.Pressed && lbi.IsSelected)
+            {
+                lbi.IsSelected = false;
+                lbi.Focus();
+                //lbBlocks.SelectedItems.Remove(lbi);
+            }
+        }        
 
         private void InsertClick(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
         }
 
+        /// <summary>
+        /// По нажатию клавишь "Enter" или "Esc" - выполнение вставки блоков (нажатие кнопки Вставка)
+        /// </summary>        
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter || e.Key == Key.Space)

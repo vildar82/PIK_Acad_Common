@@ -46,7 +46,7 @@
             </ListBox.InputBindings>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
-                    <EventSetter Event="MouseEnter" Handler="ListBoxItem_MouseEnter"/>
+                    <EventSetter Event="MouseEnter" Handler="ListBoxItem_MouseEnter"/>                    
                     <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
                 </Style>
             </ListBox.ItemContainerStyle>
