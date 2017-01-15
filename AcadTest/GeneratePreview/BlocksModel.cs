@@ -9,23 +9,27 @@ using MicroMvvm;
 using AcadLib;
 using AcadLib.Blocks;
 using PIK_Acad_Common.Utils.BlockBeside;
+using System.Threading;
+using System.Windows.Media;
 
 namespace AcadTest.GeneratePreview
 {
     public class BlocksModel : ViewModelBase
     {
-        private Database db;        
+        public Database db;        
 
         public BlocksModel(Database db)
         {
             this.db = db;
             Blocks = GetBlocks(db);
-            Ok = new RelayCommand(OnOkExecute, CanOkExecute);
+            Ok = new RelayCommand(OnOkExecute, CanOkExecute);            
         }        
 
         public ObservableCollection<Block> Blocks { get; set; }
         public List<Block> Selected { get; set; }
         public RelayCommand Ok { get; set; }
+
+        
 
         private ObservableCollection<Block> GetBlocks(Database db)
         {
@@ -49,7 +53,7 @@ namespace AcadTest.GeneratePreview
 
         private bool CanOkExecute()
         {
-            return Selected.Any();
+            return Blocks.Any(b=>b.IsSelected);
         }
 
         private void OnOkExecute()

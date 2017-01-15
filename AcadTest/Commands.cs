@@ -21,31 +21,32 @@ namespace AcadTest
             if (doc == null) return;
             var db = doc.Database;
 
-            var blocks = new BlocksModel(db);
-            var genPreviews = new GenerateBlockPreview(db);
-            genPreviews.Generate(blocks.Blocks.ToList());
+            var blocks = new BlocksModel(db);                        
             var win = new BlocksView(blocks);
             try
             {
                 if (Application.ShowModalWindow(win) == true)
                 {
                     var selBlocks = blocks.Selected;
-                    using (var t = db.TransactionManager.StartTransaction())
+                    if (selBlocks != null)
                     {
-                        var cs = db.CurrentSpaceId.GetObject(OpenMode.ForWrite) as BlockTableRecord;
-                        foreach (var item in selBlocks)
+                        using (var t = db.TransactionManager.StartTransaction())
                         {
-                            var blRef = new BlockReference(Point3d.Origin, item.Id);
-                            cs.AppendEntity(blRef);
-                            t.AddNewlyCreatedDBObject(blRef, true);
+                            var cs = db.CurrentSpaceId.GetObject(OpenMode.ForWrite) as BlockTableRecord;
+                            foreach (var item in selBlocks)
+                            {
+                                var blRef = new BlockReference(Point3d.Origin, item.Id);
+                                cs.AppendEntity(blRef);
+                                t.AddNewlyCreatedDBObject(blRef, true);
+                            }
+                            t.Commit();
                         }
-                        t.Commit();
                     }
                 }
             }
-            catch
+            catch(System.Exception ex)
             {
-
+                doc.Editor.WriteMessage($"\n{ex}");
             }
         }
     }

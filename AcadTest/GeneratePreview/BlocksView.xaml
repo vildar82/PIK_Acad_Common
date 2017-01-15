@@ -8,22 +8,33 @@
         Title="BlocksView" Height="300" Width="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition />
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ListBox Grid.Row="0"
-                 ItemsSource="{Binding Blocks}">            
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ListBox Grid.Row="0" x:Name="lbBlocks"
+                 ItemsSource="{Binding Blocks}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
-                        <Image Source="{Binding Preview}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Ok" IsDefault="True" MinWidth="60" Margin="5"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Height="5"/>
+            <Image Grid.Row="2" Source="{Binding ElementName=lbBlocks, Path=SelectedItem.Preview}"/>
+        </Grid>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Ok" Command="{Binding Ok}" Click="OkClick" IsDefault="True" MinWidth="60" Margin="5"/>
             <Button Content="Cancel" IsCancel="True" MinWidth="60" Margin="5"/>
         </StackPanel>
     </Grid>

@@ -119,6 +119,28 @@ namespace PIK_Acad_Common
             }
         }
 
+        /// <summary>
+        /// Установка подзаголовочного стиля выбранной ячейке таблицы
+        /// </summary>
+        [CommandMethod(Group, nameof(PIK_SetSpecCellSubheadStyle), CommandFlags.Modal)]
+        public void PIK_SetSpecCellSubheadStyle()
+        {
+            CommandStart.Start(doc =>
+            {
+                var ts = new SetSpecCellSubheadStyle(doc);
+                ts.SetCellSubheadStyle();
+            });
+        }
+
+        //[CommandMethod(Group, nameof(PIK_ApplyPlotSettingsCurLayoutToAllLayout), CommandFlags.Modal)]
+        //public void PIK_ApplyPlotSettingsCurLayoutToAllLayout()
+        //{
+        //    CommandStart.Start(doc =>
+        //    {
+        //        ApplyPlotSettingsCurLayoutToAllLayout.Apply();
+        //    });
+        //}
+
         public void Terminate ()
         {
             Utils.SelectBlockByParam.SelectBlocksByParam.Options.Save();

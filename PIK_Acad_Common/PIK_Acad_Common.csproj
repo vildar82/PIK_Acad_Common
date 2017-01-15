@@ -121,6 +121,7 @@
     <Compile Include="source\Utils\BlockBeside\UI\InsertBlockBesideWindow.xaml.cs">
       <DependentUpon>InsertBlockBesideWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="source\Utils\Plot\AplyPlotSettingsCurLayoutToAllLayout.cs" />
     <Compile Include="source\Utils\SelectBlockByParam\SelectBlocksByParam.cs" />
     <Compile Include="source\Utils\SelectBlockByParam\SelectBlocksByParamOptions.cs" />
     <Compile Include="source\Utils\SelectBlockByParam\UI\PropertyViewModel.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="source\Utils\SelectBlockByParam\UI\SelectBlockView.xaml.cs">
       <DependentUpon>SelectBlockView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="source\Utils\SetSpecCellSubheadStyle\SetSpecCellSubheadStyle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="source\Rename\UI\RenameWindow.xaml">

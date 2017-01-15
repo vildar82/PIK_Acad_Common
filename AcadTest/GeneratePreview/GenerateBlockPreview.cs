@@ -6,48 +6,37 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace AcadTest.GeneratePreview
 {
-    public class GenerateBlockPreview
-    {        
-        Database db;
-        CancellationTokenSource token;
-        public GenerateBlockPreview(Database db)
-        {            
-            this.db = db;            
-        }
-
-        public void Cancel()
+    public static class GenerateBlockPreview
+    {   
+        public static Task<Dictionary<string, ImageSource>> GeneratePreviewsAsync(List<string> blNames, Database db, 
+            CancellationToken cancelationToken)
         {
-            token?.Cancel();
-        }
-
-        public void Generate(List<Block> blocks)
-        {
-            token = new CancellationTokenSource();
-            Task.Run(() => NewMethod(blocks, token.Token), token.Token);            
-        }
-
-        private void NewMethod(List<Block> blNames, CancellationToken token)
-        {            
-            using (var t = db.TransactionManager.StartTransaction())
+            return Task.Run(() =>
             {
-                var bt = db.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
-                foreach (var item in blNames)
+                var res = new Dictionary<string, ImageSource>();
+                using (var bt = db.BlockTableId.Open(OpenMode.ForRead) as BlockTable)
                 {
-                    if (!token.IsCancellationRequested)
+                    foreach (var item in blNames)
                     {
-                        if (bt.Has(item.Name))
+                        cancelationToken.ThrowIfCancellationRequested();
+
+                        if (bt.Has(item))
                         {
-                            var btr = bt[item.Name].GetObject(OpenMode.ForRead) as BlockTableRecord;
-                            var preview = AcadLib.Blocks.Visual.BlockPreviewHelper.GetPreview(btr);
-                            item.Preview = preview;
+                            using (var btr = bt[item].Open(OpenMode.ForRead) as BlockTableRecord)
+                            {
+                                var preview = AcadLib.Blocks.Visual.BlockPreviewHelper.GetPreview(btr);
+                                preview.Freeze();
+                                res.Add(item, preview);
+                            }
                         }
                     }
                 }
-                t.Commit();
-            }            
-        }        
+                return res;
+            });
+        }     
     }
 }
