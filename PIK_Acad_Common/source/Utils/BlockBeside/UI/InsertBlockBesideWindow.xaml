@@ -52,7 +52,10 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Margin="2" Text="{Binding Name}" />
+                    <TextBox Margin="2" Text="{Binding Name, Mode=OneWay}" 
+                             Background="Transparent"
+                             BorderThickness="0"                         
+                             IsReadOnly="True"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

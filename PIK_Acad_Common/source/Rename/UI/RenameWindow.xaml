@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:PIK_Acad_Common.Rename.UI"   
         xmlns:local2="clr-namespace:PIK_Acad_Common.Rename"            
         mc:Ignorable="d"
+        MinWidth="450"
         Title="RenameWindow">
     <Window.Resources>        
         <ObjectDataProvider x:Key="SymbolTableNamesFromEnum"
@@ -21,8 +22,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>            
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left">
             <ComboBox ItemsSource="{Binding Source={StaticResource SymbolTableNamesFromEnum}}"
@@ -35,16 +35,25 @@
             <Label>Замена:</Label>
             <TextBox Text="{Binding Replace, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" MinWidth="50" MaxHeight="20"/>
         </DockPanel>
-        <DockPanel Grid.Row="1" HorizontalAlignment="Stretch">
-            <ListBox ItemsSource="{Binding Records, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2"
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="100"/>
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition Width="*" MinWidth="100"/>
+            </Grid.ColumnDefinitions>
+            <ListBox  Grid.Column="0" ItemsSource="{Binding Records, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2"
                          SelectedItem="{Binding SelectedRecord}" MinWidth="200">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
+                        <TextBox Text="{Binding Name, Mode=OneWay}" 
+                                 Background="Transparent"
+                                 BorderThickness="0"                         
+                                 IsReadOnly="True"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <ListBox ItemsSource="{Binding RenameRecords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2" Width="Auto">
+            <GridSplitter Grid.Column="1" Width="1" HorizontalAlignment="Stretch" />
+            <ListBox Grid.Column="2" ItemsSource="{Binding RenameRecords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2" Width="Auto">
                 <ListBox.Resources>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Background" Value="{Binding Background}" />
@@ -57,10 +66,10 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </DockPanel>
-        <TextBox Grid.Row="2" Text="{Binding SelectedRecord.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
-                   Margin="2" IsReadOnly="True" TextWrapping="Wrap" HorizontalAlignment="Left" MinWidth="90"/>
+        </Grid>        
         <DockPanel Grid.Row="3" Height="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TextBox Grid.Row="2" Text="{Binding SelectedRecord.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                   Margin="2" IsReadOnly="True" TextWrapping="Wrap" HorizontalAlignment="Left" MinWidth="90"/>
             <Button Content="Переименовать" Command="{Binding Rename}" Margin="5" HorizontalAlignment="Right"/>
         </DockPanel>
     </Grid>
